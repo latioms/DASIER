@@ -7,7 +7,7 @@ WORKDIR /app
 COPY server/ .
 
 # run requirements
-COPY ./requirements.txt .
+COPY ./requirements.txt /app
 
 # Installation des dépendances
 RUN pip install --no-cache-dir -r requirements.txt
