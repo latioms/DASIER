@@ -5,7 +5,7 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # run requirements
-COPY ./requirements.txt /app
+COPY ./requirements.txt .
 
 # Installation des dépendances
 RUN pip install --no-cache-dir -r requirements.txt
