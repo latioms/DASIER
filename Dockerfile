@@ -11,7 +11,8 @@ COPY server/ .
 
 COPY models /models
 
-RUN pip install -r requirements.txt
+# Installation des dépendances
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
