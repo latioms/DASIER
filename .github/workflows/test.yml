@@ -16,6 +16,4 @@ jobs:
           
       - name: Build and run
         run: |
-          docker stop dasier || true
-          docker rm dasier || true
           docker run -d --name dasier-run 5000:5000 dasier:latest
