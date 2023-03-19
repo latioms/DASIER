@@ -1,0 +1,11 @@
+# Ignore les fichiers et dossiers inutiles pour la construction de l'image Docker
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+*.egg
+venv
+*.log
+*.swp
