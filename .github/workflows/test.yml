@@ -13,5 +13,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         run: | 
-          echo $(whoami)
-          whoami
+          touch ssl
