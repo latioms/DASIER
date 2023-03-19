@@ -4,4 +4,6 @@ scikit-learn
 seaborn
 flask
 matplotlib
+flask
+fastapi
 -e .
