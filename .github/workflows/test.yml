@@ -9,7 +9,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+  
+      - name: Stop and remove existing container
+        run: |
+          docker stop dasier-run || true
+          docker rm dasier-run || true
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag dasier:latest
