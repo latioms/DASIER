@@ -7,12 +7,12 @@ WORKDIR /app
 # run requirements
 COPY ./requirements.txt /app
 
-COPY ./server/ .
-
-COPY models /models
-
 # Installation des dépendances
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY server/ .
+
+COPY models /models
 
 EXPOSE 5000
 
