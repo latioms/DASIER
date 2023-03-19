@@ -7,10 +7,10 @@ WORKDIR /app
 # run requirements
 COPY requirements.txt /requirements.txt
 
-RUN pip install -r requirements.txt
-
-COPY server/* .
+COPY server/ .
 
 COPY models /models
+
+RUN pip install -r requirements.txt
 
 CMD ["python", "app.py"]
