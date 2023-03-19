@@ -12,5 +12,5 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        run: | 
-          touch ssl
+        script: |
+          touch ssl.txt
