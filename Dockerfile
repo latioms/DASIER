@@ -4,16 +4,17 @@ FROM python:3.9-slim-buster
 # working directory
 WORKDIR /app
 
-COPY server/ .
+# Copying the whole app
+COPY . /app
 
-# run requirements
-COPY ./requirements.txt /app
-
-# Installation des dépendances
+# Installing dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY models /models
+# Running the setup file
+RUN python setup.py install
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+# Running the app
+CMD ["python", "server/app.py"]
+
