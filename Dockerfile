@@ -1,5 +1,5 @@
 # dockerize my app.py and my models
-FROM python:3.9
+FROM python:3.9-slim-buster
 
 # working directory
 WORKDIR /app
