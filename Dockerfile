@@ -5,9 +5,9 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # run requirements
-COPY requirements.txt ./requirements.txt
+COPY ./requirements.txt /app
 
-COPY server/ .
+COPY ./server/ .
 
 COPY models /models
 
