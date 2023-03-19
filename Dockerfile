@@ -5,12 +5,14 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # run requirements
-COPY requirements.txt /requirements.txt
+COPY requirements.txt ./requirements.txt
 
 COPY server/ .
 
 COPY models /models
 
 RUN pip install -r requirements.txt
+
+EXPOSE 5000
 
 CMD ["python", "app.py"]
