@@ -16,4 +16,4 @@ jobs:
           
       - name: Build and run
         run: |
-          docker run -d --name dasier-run 5000:5000 dasier:latest
+          docker run -d --name dasier-run -p 5000:5000 dasier:latest
