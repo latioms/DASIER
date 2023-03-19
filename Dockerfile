@@ -10,7 +10,7 @@ COPY server/ .
 COPY ./requirements.txt /app
 
 # Installation des dépendances
-RUN pip install --no-cache-dir flask 
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY models /models
 
