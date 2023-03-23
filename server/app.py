@@ -1,10 +1,27 @@
 # import main flask librairies
 from flask import Flask, render_template, request, redirect, url_for, flash
-
+import numpy as np
+import pickle as pkl
 import os
+
+file_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'diabetes.pkl')
+
+with open(file_path, 'rb') as f:
+      diabetes_model = pkl.load(f)
 
 # init app
 app = Flask(__name__)
+
+###############################################
+# PROCESSING
+###############################################
+def predict_diabetes(tab):
+      pred = diabetes_model.predict(tab)
+      return pred
+
+###############################################
+# ROUTES
+###############################################
 
 @app.route('/')
 def index():
@@ -29,21 +46,39 @@ def loan():
 # route de diabetes
 @app.route('/diabetes', methods=['GET', 'POST'])
 def diabetes():
+      prediction = None
+      resultat = ''
+      info = None
+      dpf = ''
+      # un formulaire avec asychronous request qui donne le resultat
       if request.method == 'POST':
             # get form data
-            pregnancies = request.form['pregnancies']
+            
+            preg = request.form['preg']
             glucose = request.form['glucose']
-            blood_pressure = request.form['blood_pressure']
-            skin_thickness = request.form['skin_thickness']
+            bp = request.form['bp']
+            st = request.form['st']
             insulin = request.form['insulin']
             bmi = request.form['bmi']
-            diabetes_pedigree_function = request.form['diabetes_pedigree_function']
-            age = request.form['age']
-            # format diabetes to 2 decimal places
-            diabetes = "{:.2f}".format(diabetes)
-            # return diabetes
-            return render_template('diabetes.html', diabetes=diabetes)
+            # conert dpf entry text to float value
+            dpf = float(request.form.get('dpf'))
+            print(dpf)
 
+            age = request.form['age']
+            # create array
+            tab = np.array([[preg, glucose, bp, st, insulin, bmi, dpf, age]])
+            # predict
+            prediction = predict_diabetes(tab)
+            
+            if prediction[0] == 0:
+                  resultat = 'NEGATIF'
+                  info = 'Vous etes hors de danger, mais ne vous relachez pas. Continuez a faire du sport et a manger sainement.'
+            else:
+                  resultat = 'POSITIF'
+                  info = 'Vous etes en danger, veuillez consulter un medecin.'
+      d = str(dpf)
+            # return prediction
+      return render_template('diabetes.html', prediction=prediction, result=resultat, info=info)
 
 # run server
 if __name__ == '__main__':
