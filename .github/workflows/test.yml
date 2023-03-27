@@ -1,5 +1,5 @@
 name: Build My Docker Flask App
-on: [push, merge]
+on: [push]
 jobs:
 
   build:
