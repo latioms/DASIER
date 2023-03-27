@@ -22,7 +22,6 @@ def predict_diabetes(tab):
 ###############################################
 # ROUTES
 ###############################################
-
 @app.route('/')
 def index():
       return render_template('index.html')
@@ -76,7 +75,6 @@ def diabetes():
             else:
                   resultat = 'POSITIF'
                   info = 'Vous etes en danger, veuillez consulter un medecin.'
-      d = str(dpf)
             # return prediction
       return render_template('diabetes.html', prediction=prediction, result=resultat, info=info)
 
