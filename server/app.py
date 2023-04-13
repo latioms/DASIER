@@ -2,12 +2,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import numpy as np
 import pickle as pkl
-import os
-
+import os, pandas as pd
+from sklearn.preprocessing import LabelEncoder
+# Diabetes model
 file_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'diabetes.pkl')
 
 with open(file_path, 'rb') as f:
       diabetes_model = pkl.load(f)
+
+# Churn model 
+file_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'churn_xgb_model.pkl')
+
+with open(file_path, 'rb') as f:
+      xgb = pkl.load(f)
+
 
 # init app
 app = Flask(__name__)
@@ -18,6 +26,20 @@ app = Flask(__name__)
 def predict_diabetes(tab):
       pred = diabetes_model.predict(tab)
       return pred
+
+def encode_Categorical_features(df):
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            le = LabelEncoder()
+            df[col] = le.fit_transform(df[col])
+    return df
+
+def predict_new_data(Xnew):
+      # si c'est un dictionnaire on le transforme en dataframe
+      if type(Xnew) == dict:
+            Xnew = pd.DataFrame(Xnew, index = [0])
+      Xnew = encode_Categorical_features(Xnew)
+      return xgb.predict(Xnew)
 
 ###############################################
 # ROUTES
@@ -30,16 +52,7 @@ def index():
 @app.route('/loan', methods=['GET', 'POST'])
 def loan():
       if request.method == 'POST':
-            # get form data
-            loan_amount = request.form['loan_amount']
-            loan_term = request.form['loan_term']
-            interest_rate = request.form['interest_rate']
-            # calculate monthly payment
-            monthly_payment = float(loan_amount) * (float(interest_rate) / 100) / (1 - (1 + float(interest_rate) / 100) ** (-float(loan_term)))
-            # format monthly payment to 2 decimal places
-            monthly_payment = "{:.2f}".format(monthly_payment)
-            # return monthly payment
-            return render_template('loan.html', monthly_payment=monthly_payment)
+            pass
       return render_template('loan.html')
 
 # route de diabetes
@@ -78,6 +91,55 @@ def diabetes():
             # return prediction
       return render_template('diabetes.html', prediction=prediction, result=resultat, info=info)
 
-# run server
+# route de churn
+import json
+@app.route('/churn', methods=['GET', 'POST'])
+def churn():
+    """
+    churn prediction : 
+    this route is used to predict if a customer will churn or not
+    une entree ressemble a {'CreditScore': 600, 'Geography':'Spain', 'Gender':'Female', 'Age': 40, 'Tenure': 3, 'Balance': 60000, 'NumOfProducts': 2, 'HasCrCard': 1, 'IsActiveMember': 1, 'EstimatedSalary': 50000} 
+    definissons une route qui recuperes les champs du formulaire et les convertis en json pour les envoyer au modele de prediction
+    """
+    predict = []
+    if request.method == 'POST':
+        # récupération des données du formulaire
+        CreditScore = int(request.form.get('CreditScore'))
+        Geography = request.form.get('Geography')
+        Gender = request.form.get('Gender')
+        Age = int(request.form.get('Age'))
+        Tenure = int(request.form.get('Tenure'))
+        Balance = int(request.form.get('Balance'))
+        NumOfProducts = int(request.form.get('NumOfProducts'))
+        HasCrCard = int(request.form.get('HasCrCard'))
+        IsActiveMember = int(request.form.get('IsActiveMember'))
+        EstimatedSalary = int(request.form.get('EstimatedSalary'))
+
+        # transformation des données en un dictionnaire JSON
+        input_data = {
+            'CreditScore': CreditScore,
+            'Geography': Geography,
+            'Gender': Gender,
+            'Age': Age,
+            'Tenure': Tenure,
+            'Balance': Balance,
+            'NumOfProducts': NumOfProducts,
+            'HasCrCard': HasCrCard,
+            'IsActiveMember': IsActiveMember,
+            'EstimatedSalary': EstimatedSalary
+        }
+        input_data_json = json.dumps(input_data)
+
+        print(input_data)
+        
+
+        # utilisation du modèle pour faire la prédiction
+        predict = predict_new_data(input_data)
+        predict = predict[0]
+        print("predict=",predict)
+    # retourne le template HTML avec le résultat de la prédiction
+    return render_template('churn.html', predict=predict)
+
+
 if __name__ == '__main__':
-      app.run(debug=True, host='0.0.0.0', port=5000)
+      app.run(debug=True, port=5000, host='0.0.0.0')

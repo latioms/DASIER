@@ -53,5 +53,4 @@ for row in rows:
     cursor.execute("INSERT INTO population (country, population, yearly_change, net_change, density, land_area, migrants, fertility_rate, median_age, urban_pop_pct, world_share) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", row[1:])
     conn.commit()
 
-# Fermeture de la connexion à la base de données
 conn.close()

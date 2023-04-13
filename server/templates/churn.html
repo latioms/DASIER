@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction</title>
+</head>
+  <body>
+    <h1>Churn Prediction Form</h1>
+    <form method="POST">
+      <label for="CreditScore">Credit Score:</label>
+      <input type="text" id="CreditScore" name="CreditScore"><br><br>
+      <label for="Geography">Geography:</label>
+      <input type="text" id="Geography" name="Geography"><br><br>
+      <label for="Gender">Gender:</label>
+      <input type="text" id="Gender" name="Gender"><br><br>
+      <label for="Age">Age:</label>
+      <input type="text" id="Age" name="Age"><br><br>
+      <label for="Tenure">Tenure:</label>
+      <input type="text" id="Tenure" name="Tenure"><br><br>
+      <label for="Balance">Balance:</label>
+      <input type="text" id="Balance" name="Balance"><br><br>
+      <label for="NumOfProducts">Number of Products:</label>
+      <input type="text" id="NumOfProducts" name="NumOfProducts"><br><br>
+      <label for="HasCrCard">Has Credit Card:</label>
+      <input type="text" id="HasCrCard" name="HasCrCard"><br><br>
+      <label for="IsActiveMember">Is Active Member:</label>
+      <input type="text" id="IsActiveMember" name="IsActiveMember"><br><br>
+      <label for="EstimatedSalary">Estimated Salary:</label>
+      <input type="text" id="EstimatedSalary" name="EstimatedSalary"><br><br>
+      <input type="submit" value="Predict">
+    </form>
+    <h2>Churn Prediction</h2>
+      {% if predict == 0 %}
+        <p>The customer is predicted not to churn.</p>
+      {% else %}
+        <p>The customer is predicted to churn.</p>
+      {% endif %}
+  </body>
+</html>
